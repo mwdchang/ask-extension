@@ -1,0 +1,122 @@
+/* Humanist Style for Chrome Extension Popup */
+
+body {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 16px;
+  background-color: #fefefe;
+
+  color: #2c2c2c;
+  width: 500px;
+  height: 350px;
+
+  box-sizing: border-box;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h3 {
+  font-weight: 600;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+pre {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 300px;
+  overflow: auto;
+  color: #333;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #2c2c2c;
+  background-color: #fafafa;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+textarea:focus {
+  border-color: #3a73b0;
+  outline: none;
+  background-color: #fff;
+}
+
+button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  background-color: #3a73b0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #305e90;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+a {
+  color: #3a73b0;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+.spinner-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  display: none; /* Initially hidden */
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
