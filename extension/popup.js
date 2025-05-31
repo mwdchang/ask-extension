@@ -1,10 +1,35 @@
+let tabURL = '';
 function getSelectedText() {
   const selection = window.getSelection();
   return selection ? selection.toString() : '';
 }
 
+function spinnerOn() {
+  document.getElementById('spinnerOverlay').style.display = 'flex';
+}
+
+function spinnerOff() {
+  document.getElementById('spinnerOverlay').style.display = 'none';
+}
+
+async function sendRequest(type, text) {
+  const response = await fetch(`http://localhost:3000/api/${type}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      text: text,
+      url: tabURL
+    })
+  });
+  const data = await response.json();
+  return data;
+}
+
 // Inject this function into the page and get the result
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  tabURL = tabs[0].url;
   chrome.scripting.executeScript(
     {
       target: { tabId: tabs[0].id },
@@ -19,27 +44,20 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
   );
 });
 
-// document.getElementById('input').value = 'test123';
+document.getElementById('chat').addEventListener('click', async () => {
+  let prompt = document.getElementById('input').value;
+  spinnerOn();
+  const data = await sendRequest('chat', prompt);
+  const responseField = document.getElementById('response');
+  responseField.innerHTML = marked.parse(data);
+  spinnerOff();
+});
 
-document.getElementById("chat").addEventListener("click", async () => {
-  let prompt = document.getElementById("input").value;
-  const responseField = document.getElementById("response");
-  
-  document.getElementById('spinnerOverlay').style.display = 'flex';
-
-  const response = await fetch("http://localhost:3000/api/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      question: prompt
-    })
-  });
-
-  document.getElementById('spinnerOverlay').style.display = 'none';
-
-  const data = await response.json();
-  // responseField.textContent = data.choices?.[0]?.message?.content || "No response";
-  responseField.textContent = data;
+document.getElementById('explain').addEventListener('click', async () => {
+  let prompt = document.getElementById('input').value;
+  spinnerOn();
+  const data = await sendRequest('explain', prompt);
+  const responseField = document.getElementById('response');
+  responseField.innerHTML = marked.parse(data);
+  spinnerOff();
 });
