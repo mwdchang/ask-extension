@@ -77,5 +77,10 @@ app.post('/api/chat', async (req, res) => {
   res.json(result);
 });
 
+app.get('/api/history', async (_req, res) => {
+  const history = tracker.values();
+  res.json([ ...history ]);
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

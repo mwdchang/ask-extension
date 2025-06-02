@@ -8,29 +8,41 @@
   <script src="popup.js" defer></script>
 </head>
 <body>
-  <h3>Ask AI</h3>
-  <textarea 
-    id="input" 
-    placeholder="Text goes here..." ></textarea>
-  <button id="chat">Chat</button>
-  <button id="explain">Explain</button>
-  <div id="response" class="markdown-container">
+  <div class="tabs">
+    <div class="tab-button active" data-tab="tab1">Ask</div>
+    <div class="tab-button" data-tab="tab2">History</div>
   </div>
 
-  <div class="spinner-overlay" id="spinnerOverlay">
-    <svg class="spinner" viewBox="0 0 50 50">
-      <circle
-        cx="25"
-        cy="25"
-        r="20"
-        fill="none"
-        stroke="#3498db"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-dasharray="160"
-        stroke-dashoffset="75">
-      </circle>
-    </svg>
+  <!-- tab 1 -->
+  <div id="tab1" class="tab-content active">
+    <textarea 
+      id="input" 
+      placeholder="Text goes here..." ></textarea>
+    <button id="chat">Chat</button>
+    <button id="explain">Explain</button>
+    <div id="response" class="markdown-container">
+    </div>
+
+    <div class="spinner-overlay" id="spinnerOverlay">
+      <svg class="spinner" viewBox="0 0 50 50">
+        <circle
+          cx="25"
+          cy="25"
+          r="20"
+          fill="none"
+          stroke="#3498db"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-dasharray="160"
+          stroke-dashoffset="75">
+        </circle>
+      </svg>
+    </div>
+  </div>
+
+  <!-- tab 2 -->
+  <div id="tab2" class="tab-content">
+    <div id="history-container"></div>
   </div>
 </body>
 </html>
