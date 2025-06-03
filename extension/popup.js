@@ -74,8 +74,11 @@ async function sendRequest(type, text) {
 async function getHistory() {
   const response = await fetch(`http://localhost:3000/api/history`);
   const data = await response.json();
-
   document.getElementById('history-container').innerHTML = makeTable(data);
+
+  const response2 = await fetch(`http://localhost:3000/api/history-direction`);
+  const data2 = await response2.json();
+  document.getElementById('history-direction').innerHTML = marked.parse(data2.historyDirection);
 }
 
 // Inject this function into the page and get the result
