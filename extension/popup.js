@@ -1,12 +1,8 @@
 const params = new URLSearchParams(window.location.search);
 const fromUrl = params.get("fromUrl");
-// let text = params.get("text") || undefined;
-// document.getElementById('input').value = text;
-console.log("Came from URL:", fromUrl);
-// console.log("Came from text:", text);
-
 document.getElementById("url-info").innerHTML = fromUrl;
 
+// Get selected text, if any
 chrome.runtime.sendMessage({ type: "getSelectedText" }, (response) => {
   if (chrome.runtime.lastError) {
     console.error("Error:", chrome.runtime.lastError.message);
@@ -88,6 +84,8 @@ async function getHistory() {
   const data = await response.json();
   document.getElementById('history-container').innerHTML = makeTable(data);
 
+
+  document.getElementById('history-direction').innerHTML = 'generating directions';
   const response2 = await fetch(`http://localhost:30303/api/history-direction`);
   const data2 = await response2.json();
   document.getElementById('history-direction').innerHTML = marked.parse(data2.historyDirection);
