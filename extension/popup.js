@@ -1,8 +1,20 @@
-let tabURL = '';
-function getSelectedText() {
-  const selection = window.getSelection();
-  return selection ? selection.toString() : '';
-}
+const params = new URLSearchParams(window.location.search);
+const fromUrl = params.get("fromUrl");
+// let text = params.get("text") || undefined;
+// document.getElementById('input').value = text;
+console.log("Came from URL:", fromUrl);
+// console.log("Came from text:", text);
+
+document.getElementById("url-info").innerHTML = fromUrl;
+
+chrome.runtime.sendMessage({ type: "getSelectedText" }, (response) => {
+  if (chrome.runtime.lastError) {
+    console.error("Error:", chrome.runtime.lastError.message);
+    return;
+  }
+  document.getElementById("input").value = response.text;
+});
+
 
 function spinnerOn() {
   document.getElementById('spinnerOverlay').style.display = 'flex';
@@ -57,14 +69,14 @@ function makeTable(data) {
 
 
 async function sendRequest(type, text) {
-  const response = await fetch(`http://localhost:3000/api/${type}`, {
+  const response = await fetch(`http://localhost:30303/api/${type}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       text: text,
-      url: tabURL
+      url: fromUrl 
     })
   });
   const data = await response.json();
@@ -72,16 +84,17 @@ async function sendRequest(type, text) {
 }
 
 async function getHistory() {
-  const response = await fetch(`http://localhost:3000/api/history`);
+  const response = await fetch(`http://localhost:30303/api/history`);
   const data = await response.json();
   document.getElementById('history-container').innerHTML = makeTable(data);
 
-  const response2 = await fetch(`http://localhost:3000/api/history-direction`);
+  const response2 = await fetch(`http://localhost:30303/api/history-direction`);
   const data2 = await response2.json();
   document.getElementById('history-direction').innerHTML = marked.parse(data2.historyDirection);
 }
 
 // Inject this function into the page and get the result
+/*
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
   tabURL = tabs[0].url;
   chrome.scripting.executeScript(
@@ -90,13 +103,13 @@ chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       func: getSelectedText
     },
     (results) => {
-      console.log(results);
-      const text = results[0]?.result || 'No text selected.';
+      const text = results[0]?.result || undefined;
       // document.getElementById('selectedText').textContent = text;
       document.getElementById('input').value = text;
     }
   );
 });
+*/
 
 document.querySelectorAll('.tab-button').forEach(button => {
   button.addEventListener('click', () => {

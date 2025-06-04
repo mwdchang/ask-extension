@@ -3,9 +3,9 @@
   "name": "Ask Assistant",
   "version": "1.0",
   "description": "A Chrome extension explains things you may not know about.",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
+  "host_permissions": ["<all_urls>"],
   "action": {
-    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js"
