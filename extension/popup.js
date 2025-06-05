@@ -85,6 +85,9 @@ async function getHistory() {
   document.getElementById('history-container').innerHTML = makeTable(data);
 
 
+}
+
+async function generatePlan() {
   document.getElementById('history-direction').innerHTML = 'generating directions';
   const response2 = await fetch(`http://localhost:30303/api/history-direction`);
   const data2 = await response2.json();
@@ -124,6 +127,8 @@ document.querySelectorAll('.tab-button').forEach(button => {
   });
 });
 
+
+
 document.getElementById('chat').addEventListener('click', async () => {
   let prompt = document.getElementById('input').value;
   spinnerOn();
@@ -142,4 +147,6 @@ document.getElementById('explain').addEventListener('click', async () => {
   spinnerOff();
 });
 
-
+document.getElementById('generatePlan').addEventListener('click', async () => {
+  generatePlan();
+});

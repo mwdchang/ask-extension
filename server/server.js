@@ -1,4 +1,5 @@
 // require('dotenv').config();
+import { readFile, writeFile } from 'fs/promises';
 import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
@@ -11,7 +12,25 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const tracker = new Map();
+
+let tracker = [];
+const writeTracker = async () => {
+  try {
+    await writeFile('history.json', JSON.stringify(tracker, null, 2));
+  } catch (err) {
+    console.error(err);
+  }
+};
+const readTracker = async () => {
+  const jsonString = await readFile('history.json', 'utf-8');
+  try {
+    tracker = JSON.parse(jsonString);
+    console.log(`read ${tracker.length} entries from history file`);
+  } catch (err) {
+    console.error(err);
+    tracker = [];
+  } 
+};
 
 const client = new OpenAI({
   baseURL: process.env['API_SERVER'],
@@ -86,7 +105,9 @@ app.post('/api/explain', async (req, res) => {
     result,
     ts: (new Date()).getTime()
   };
-  tracker.set(trackPayload.id, trackPayload);
+  tracker.push(trackPayload);
+  console.log('!!', tracker);
+  writeTracker();
   res.json(result);
 });
 
@@ -112,17 +133,19 @@ app.post('/api/chat', async (req, res) => {
     result,
     ts: (new Date()).getTime()
   };
-  tracker.set(trackPayload.id, trackPayload);
+  tracker.push(trackPayload);
+  console.log('!!', tracker);
+  writeTracker();
   res.json(result);
 });
 
 app.get('/api/history', async (_req, res) => {
-  const history = tracker.values();
-  res.json([ ...history ]);
+  console.log('getting history', tracker.length);
+  res.json(tracker);
 });
 
 app.get('/api/history-direction', async (req, res) => {
-  const history = [ ...tracker.values()];
+  const history = tracker;
   console.log(`getting history direction for ${history.length} entries`);
 
   const historyStr = history.map(h => {
@@ -159,7 +182,9 @@ app.get('/api/history-direction', async (req, res) => {
   });
 });
 
+readTracker();
 const PORT = process.env.PORT || 30303;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 
