@@ -2,6 +2,9 @@ const params = new URLSearchParams(window.location.search);
 const fromUrl = params.get("fromUrl");
 document.getElementById("url-info").innerHTML = fromUrl;
 
+let searchStr = '';
+let historyData = [];
+
 // Get selected text, if any
 chrome.runtime.sendMessage({ type: "getSelectedText" }, (response) => {
   if (chrome.runtime.lastError) {
@@ -38,7 +41,7 @@ function formatDateTime(date) {
 }
 
 
-function makeTable(data) {
+function makeTable(historyData) {
   let table = `
     <table border="1" cellspacing="0" cellpadding="5">
       <thead>
@@ -52,13 +55,31 @@ function makeTable(data) {
       <tbody>
   `;
 
-  for (const item of data) {
+  const filteredHistoryData = historyData.filter(item => {
+    if (!searchStr || searchStr === '') {
+      return true;
+    }
+    if (item.text.toLowerCase().includes(searchStr.toLowerCase())) {
+      return true;
+    }
+    if (item.url.toLowerCase().includes(searchStr.toLowerCase())) {
+      return true;
+    }
+    return false;
+  });
+
+  for (const item of filteredHistoryData) {
+    let text = item.text;
+    if (text.length > 150) {
+      text = text.slice(0, 147) + '...';
+    }
+
     table += `
       <tr>
         <td><button class="view-history" data-entry-id="${item.id}" style="padding: 6px 9px">view</button></td>
         <td>${formatDateTime(new Date(item.ts))}</td>
         <td>${item.url}</td>
-        <td>${item.text}</td>
+        <td>${text}</td>
       </tr>
     `;
   }
@@ -90,7 +111,7 @@ async function sendRequest(type, text) {
 
 async function getHistory() {
   const response = await fetch(`http://localhost:30303/api/history`);
-  const historyData = await response.json();
+  historyData = await response.json();
   elementId('history-container').innerHTML = makeTable(historyData);
 
   // Inject listeners
@@ -178,4 +199,9 @@ elementId('explain').addEventListener('click', async () => {
 
 elementId('generatePlan').addEventListener('click', async () => {
   generatePlan();
+});
+
+elementId('search-history').addEventListener('input', () => {
+  searchStr = elementId('search-history').value;
+  elementId('history-container').innerHTML = makeTable(historyData);
 });

@@ -42,10 +42,17 @@
   </div>
 
   <!-- tab 2 -->
-  <div id="tab2" class="tab-content">
-    <div id="history-container"></div>
-    <button id="generatePlan">Generate plan</button>
-    <div id="history-direction" class="markdown-container"></div>
+  <div id="tab2" class="tab-content"> 
+    <input type="text" id="search-history" size="50" placeholder="Search..." />
+    <div style="display:flex; flex-direction: row; gap: 10px">
+      <div style="width: 620px">
+        <div id="history-container"></div>
+      </div>
+      <div style="flex-grow: 1">
+        <button id="generatePlan">Generate plan</button>
+        <div id="history-direction" class="markdown-container"></div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
