@@ -12,12 +12,16 @@ chrome.runtime.sendMessage({ type: "getSelectedText" }, (response) => {
 });
 
 
+function elementId(id) {
+  return document.getElementById(id);
+}
+
 function spinnerOn() {
-  document.getElementById('spinnerOverlay').style.display = 'flex';
+  elementId('spinnerOverlay').style.display = 'flex';
 }
 
 function spinnerOff() {
-  document.getElementById('spinnerOverlay').style.display = 'none';
+  elementId('spinnerOverlay').style.display = 'none';
 }
 
 function formatDateTime(date) {
@@ -32,11 +36,14 @@ function formatDateTime(date) {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+
 function makeTable(data) {
   let table = `
     <table border="1" cellspacing="0" cellpadding="5">
       <thead>
         <tr>
+          <th>&nbsp;</th>
           <th>Timestamp</th>
           <th>URL</th>
           <th>Text</th>
@@ -48,6 +55,7 @@ function makeTable(data) {
   for (const item of data) {
     table += `
       <tr>
+        <td><button class="view-history" data-entry-id="${item.id}" style="padding: 6px 9px">view</button></td>
         <td>${formatDateTime(new Date(item.ts))}</td>
         <td>${item.url}</td>
         <td>${item.text}</td>
@@ -79,19 +87,39 @@ async function sendRequest(type, text) {
   return data;
 }
 
+
 async function getHistory() {
   const response = await fetch(`http://localhost:30303/api/history`);
-  const data = await response.json();
-  document.getElementById('history-container').innerHTML = makeTable(data);
+  const historyData = await response.json();
+  elementId('history-container').innerHTML = makeTable(historyData);
 
+  // Inject listeners
+  document.querySelectorAll('.view-history').forEach(button => {
+    button.addEventListener('click', () => {
+      elementId('tab-button-1').classList.add('active');
+      elementId('tab1').classList.add('active');
 
+      elementId('tab-button-2').classList.remove('active');
+      elementId('tab2').classList.remove('active');
+
+      const entryId = button.getAttribute('data-entry-id');
+        
+      const entry = historyData.find(d => d.id === entryId);
+      if (entry) {
+        elementId("input").value = entry.text;
+        elementId('response').innerHTML = marked.parse(entry.result);
+      }
+    });
+  });
 }
 
+
 async function generatePlan() {
-  document.getElementById('history-direction').innerHTML = 'generating directions';
+  elementId('history-direction').innerHTML = 'generating directions';
   const response2 = await fetch(`http://localhost:30303/api/history-direction`);
   const data2 = await response2.json();
-  document.getElementById('history-direction').innerHTML = marked.parse(data2.historyDirection);
+  elementId('history-direction').innerHTML = marked.parse(data2.historyDirection);
+
 }
 
 // Inject this function into the page and get the result
@@ -119,7 +147,7 @@ document.querySelectorAll('.tab-button').forEach(button => {
 
     button.classList.add('active');
     const tabId = button.getAttribute('data-tab');
-    document.getElementById(tabId).classList.add('active');
+    elementId(tabId).classList.add('active');
 
     if (tabId === 'tab2') {
       getHistory();
@@ -128,25 +156,26 @@ document.querySelectorAll('.tab-button').forEach(button => {
 });
 
 
-
-document.getElementById('chat').addEventListener('click', async () => {
-  let prompt = document.getElementById('input').value;
+elementId('chat').addEventListener('click', async () => {
+  let prompt = elementId('input').value;
   spinnerOn();
   const data = await sendRequest('chat', prompt);
-  const responseField = document.getElementById('response');
+  const responseField = elementId('response');
   responseField.innerHTML = marked.parse(data);
   spinnerOff();
 });
 
-document.getElementById('explain').addEventListener('click', async () => {
-  let prompt = document.getElementById('input').value;
+
+elementId('explain').addEventListener('click', async () => {
+  let prompt = elementId('input').value;
   spinnerOn();
   const data = await sendRequest('explain', prompt);
-  const responseField = document.getElementById('response');
+  const responseField = elementId('response');
   responseField.innerHTML = marked.parse(data);
   spinnerOff();
 });
 
-document.getElementById('generatePlan').addEventListener('click', async () => {
+
+elementId('generatePlan').addEventListener('click', async () => {
   generatePlan();
 });

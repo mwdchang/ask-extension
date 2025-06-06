@@ -1,6 +1,5 @@
-// require('dotenv').config();
-import { readFile, writeFile } from 'fs/promises';
 import 'dotenv/config'
+import { readFile, writeFile } from 'fs/promises';
 import express from 'express';
 import cors from 'cors';
 import OpenAI from 'openai';
@@ -75,7 +74,7 @@ async function summarizePage(url) {
 
 app.post('/api/explain', async (req, res) => {
   const { text, url } = req.body;
-  console.log('chatting:', url, text);
+  console.log('explain', url, text);
 
   const prompt = `
   Explain the follow blurb as if you are taking with a university student.
@@ -106,14 +105,14 @@ app.post('/api/explain', async (req, res) => {
     ts: (new Date()).getTime()
   };
   tracker.push(trackPayload);
-  console.log('!!', tracker);
+  
   writeTracker();
   res.json(result);
 });
 
 app.post('/api/chat', async (req, res) => {
   const { text, url } = req.body;
-  console.log('chatting:', url, text);
+  console.log('chat', url, text);
 
   const response = await client.chat.completions.create({
     messages: [
@@ -134,7 +133,7 @@ app.post('/api/chat', async (req, res) => {
     ts: (new Date()).getTime()
   };
   tracker.push(trackPayload);
-  console.log('!!', tracker);
+  
   writeTracker();
   res.json(result);
 });
@@ -182,6 +181,7 @@ app.get('/api/history-direction', async (req, res) => {
   });
 });
 
+// Initialization
 readTracker();
 const PORT = process.env.PORT || 30303;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
