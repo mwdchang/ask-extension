@@ -63,6 +63,7 @@ function makeTable(historyData) {
           <th>Timestamp</th>
           <th>URL</th>
           <th>Text</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -94,6 +95,11 @@ function makeTable(historyData) {
         <td>${formatDateTime(new Date(item.ts))}</td>
         <td>${item.url}</td>
         <td>${text}</td>
+        <td>
+          <a class="remove-history" data-entry-id="${item.id}" style="color: red">
+           remove 
+          </a>
+        </td>
       </tr>
     `;
   }
@@ -102,7 +108,6 @@ function makeTable(historyData) {
       </tbody>
     </table>
   `;
-
   return table;
 }
 
@@ -144,6 +149,16 @@ async function getHistory() {
         elementId("input").value = entry.text;
         elementId('response').innerHTML = marked.parse(entry.result);
       }
+    });
+  });
+  document.querySelectorAll('.remove-history').forEach(button => {
+    button.addEventListener('click', async () => {
+      const entryId = button.getAttribute('data-entry-id');
+      await fetch(`http://localhost:30303/api/history/${entryId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      getHistory();
     });
   });
 }
