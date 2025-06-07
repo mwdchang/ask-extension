@@ -138,6 +138,24 @@ app.post('/api/chat', async (req, res) => {
   res.json(result);
 });
 
+app.delete('/api/history', async (_req, res) => {
+  console.log('clear history...');
+  tracker = [];
+  writeTracker();
+
+  res.json(tracker);
+});
+
+app.delete('/api/history/:id', async (req, res) => {
+  const id = req.params.id;
+  console.log('clear history...', id);
+
+  tracker = tracker.filter(d => d.id !== id);
+  writeTracker();
+
+  res.json(tracker);
+});
+
 app.get('/api/history', async (_req, res) => {
   console.log('getting history', tracker.length);
   res.json(tracker);

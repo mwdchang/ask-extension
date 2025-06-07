@@ -1,6 +1,19 @@
+// TODO
+// - clear history
+// - selective history
+//
+
+function shorten(text, len) {
+  if (!len) len = 150
+  if (text.length > len) {
+    return text.slice(0, len-3) + '...';
+  }
+  return text;
+}
+
 const params = new URLSearchParams(window.location.search);
 const fromUrl = params.get("fromUrl");
-document.getElementById("url-info").innerHTML = fromUrl;
+document.getElementById("url-info").innerHTML = shorten(fromUrl, 120);
 
 let searchStr = '';
 let historyData = [];
@@ -69,14 +82,15 @@ function makeTable(historyData) {
   });
 
   for (const item of filteredHistoryData) {
-    let text = item.text;
-    if (text.length > 150) {
-      text = text.slice(0, 147) + '...';
-    }
+    let text = shorten(item.text);
 
     table += `
       <tr>
-        <td><button class="view-history" data-entry-id="${item.id}" style="padding: 6px 9px">view</button></td>
+        <td>
+          <a class="view-history" data-entry-id="${item.id}">
+            view
+          </a>
+        </td>
         <td>${formatDateTime(new Date(item.ts))}</td>
         <td>${item.url}</td>
         <td>${text}</td>
