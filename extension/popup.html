@@ -17,7 +17,9 @@
 
   <!-- tab 1 -->
   <div id="tab1" class="tab-content active">
+    <!--
     <div id="url-info"></div>
+    -->
     <textarea 
       id="input" 
       placeholder="Text goes here..." ></textarea>
@@ -45,13 +47,16 @@
 
   <!-- tab 2 -->
   <div id="tab2" class="tab-content"> 
-    <input type="text" id="search-history" size="50" placeholder="Search..." />
-    <div style="display:flex; flex-direction: row; gap: 10px">
+    <div style="display: flex; justify-content: space-between; align-items: centre">
+      <input type="text" id="search-history" size="50" placeholder="Search history..." />
+      <button id="generatePlan" style="margin-top: 0">Generate study plan</button>
+    </div>
+
+    <div style="display:flex; flex-direction: row; gap: 10px; margin-top: 5px">
       <div style="width: 620px">
         <div id="history-container"></div>
       </div>
       <div style="flex-grow: 1">
-        <button id="generatePlan">Generate plan</button>
         <div id="history-direction" class="markdown-container"></div>
       </div>
     </div>

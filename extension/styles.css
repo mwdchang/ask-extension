@@ -1,10 +1,15 @@
-/* Humanist Style for Chrome Extension Popup */
+/* Humanist Style for Chrome Extension Popup - Dark Theme */
 body {
   font-family: 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+  height: 100%;
   margin: 0;
   padding: 12px;
-  background-color: #fefefe;
-  color: #2c2c2c;
+  /* background-color: #1e1e1e; */
+  background: linear-gradient(to bottom right, #003000, #2a0830);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  color: #e0e0e0;
   box-sizing: border-box;
   font-size: 15px;
   line-height: 1.5;
@@ -13,7 +18,7 @@ body {
 h3 {
   font-size: 1.2em;
   margin-bottom: 5px;
-  color: #1a1a1a;
+  color: #ffffff;
 }
 
 textarea {
@@ -22,33 +27,33 @@ textarea {
   resize: vertical;
   padding: 10px;
   margin-top: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 6px;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: inherit;
   font-size: 14px;
   line-height: 1.4;
-  color: #2c2c2c;
-  background-color: #fafafa;
+  color: #e0e0e0;
+  background-color: #2a2a2a;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
 }
 
 textarea:focus {
-  border-color: #3a73b0;
+  border-color: #5fa1f5;
   outline: none;
-  background-color: #fff;
+  background-color: #333;
 }
 
 button {
   display: inline-block;
   margin-top: 10px;
-  padding: 8px 16px;
+  padding: 5px 12px;
   font-family: inherit;
   font-size: 14px;
   color: white;
-  background-color: #3a73b0;
+  background-color: #3a73d0;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
@@ -62,12 +67,12 @@ button:active {
 }
 
 button:disabled {
-  background-color: #aaa;
+  background-color: #555;
   cursor: not-allowed;
 }
 
 a {
-  color: #3a73b0;
+  color: #5fa1f5;
   text-decoration: none;
 }
 
@@ -76,23 +81,28 @@ a:hover {
 }
 
 input[type="text"] {
-  font-family: "Segoe UI", "Roboto", "Helvetica Neue", "Open Sans", sans-serif;
+  font-family: inherit;
   font-size: 12px;
   line-height: 1.0;
   padding: 0.4em 0.8em;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   border-radius: 4px;
-  background-color: #fdfdfd;
-  color: #333;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
   transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input::placeholder {
+  color: #e0e0e0;
+  opacity: 0.8;
 }
 
 
 /*********** Tabs ***************/
 .tabs {
   display: flex;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #444;
   margin-bottom: 5px;
 }
 
@@ -101,11 +111,12 @@ input[type="text"] {
   cursor: pointer;
   border: none;
   background: none;
+  color: #bbb;
 }
 
 .tab-button.active {
-  border-bottom: 2px solid #3498db;
-  color: #3498db;
+  border-bottom: 2px solid #5fa1f5;
+  color: #5fa1f5;
 }
 
 .tab-content {
@@ -130,18 +141,18 @@ table {
   border-collapse: collapse;
   font-family: 'Inter', sans-serif;
   font-size: 12px;
-  color: #333;
-  background-color: #fff;
+  color: #e0e0e0;
+  background-color: #2a2a2a;
   margin-top: 5px;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
 thead {
-  background-color: #f7f9fa;
+  background-color: #3a3a3a;
   font-weight: 600;
   text-align: left;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid #555;
 }
 
 th, td {
@@ -149,5 +160,5 @@ th, td {
 }
 
 tbody tr {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #444;
 }

@@ -1,8 +1,3 @@
-// TODO
-// - clear history
-// - selective history
-//
-
 function shorten(text, len) {
   if (!len) len = 150
   if (text.length > len) {
@@ -13,7 +8,7 @@ function shorten(text, len) {
 
 const params = new URLSearchParams(window.location.search);
 const fromUrl = params.get("fromUrl");
-document.getElementById("url-info").innerHTML = shorten(fromUrl, 120);
+// document.getElementById("url-info").innerHTML = shorten(fromUrl, 120);
 
 let searchStr = '';
 let historyData = [];
@@ -50,7 +45,8 @@ function formatDateTime(date) {
   const minutes = pad(date.getMinutes());
   const seconds = pad(date.getSeconds());
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  // return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
 
 
@@ -93,10 +89,10 @@ function makeTable(historyData) {
           </a>
         </td>
         <td>${formatDateTime(new Date(item.ts))}</td>
-        <td>${item.url}</td>
+        <td>${shorten(item.url, 60)}</td>
         <td>${text}</td>
         <td>
-          <a class="remove-history" data-entry-id="${item.id}" style="color: red">
+          <a class="remove-history" data-entry-id="${item.id}" style="color: #FF4400">
            remove 
           </a>
         </td>
@@ -165,7 +161,7 @@ async function getHistory() {
 
 
 async function generatePlan() {
-  elementId('history-direction').innerHTML = 'generating directions';
+  elementId('history-direction').innerHTML = 'generating study plan...';
   const response2 = await fetch(`http://localhost:30303/api/history-direction`);
   const data2 = await response2.json();
   elementId('history-direction').innerHTML = marked.parse(data2.historyDirection);
